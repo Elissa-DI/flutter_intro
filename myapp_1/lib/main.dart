@@ -1,59 +1,71 @@
 import 'package:flutter/material.dart';
+import 'quote.dart';
 
 void main() {
-  runApp(MaterialApp(home: Home()));
+  runApp(MaterialApp(home: QuoteList()));
 }
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+class QuoteList extends StatefulWidget {
+  const QuoteList({super.key});
+
+  @override
+  State<QuoteList> createState() => _QuoteListState();
+}
+
+class _QuoteListState extends State<QuoteList> {
+  List<Quote> quotes = [
+    Quote(author: 'John Doe', text: 'Believe in yourself.'),
+    Quote(
+      author: 'Jane Smith',
+      text: 'Stay positive, work hard, make it happen.',
+    ),
+    Quote(
+      author: 'Master Ninja',
+      text: 'Move in silence, strike with precision.',
+    ),
+  ];
+
+  Widget quoteTemplate(quote) {
+    return Card(
+      margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Text(
+              quote.text,
+              style: TextStyle(fontSize: 18.0, color: Colors.grey[600]),
+            ),
+            SizedBox(height: 6.0),
+            Text(
+              quote.author,
+              style: TextStyle(fontSize: 14.0, color: Colors.grey[800]),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: Text(
-          'My App',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white70),
+          'Awesome Quotes',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 22.0,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.red[600],
+        backgroundColor: Colors.redAccent,
       ),
-      body: Row(
-        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Expanded(
-            flex: 3,
-            child: Image.asset('assets/ghost.png'),
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              padding: EdgeInsets.all(20.0),
-              color: Colors.cyan,
-              child: Text('1'),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              padding: EdgeInsets.all(20.0),
-              color: Colors.red,
-              child: Text('2'),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.all(20.0),
-              color: Colors.amber,
-              child: Text('3'),
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: Colors.red[500],
-        child: Text('Click me'),
+      body: Column(
+        children: quotes.map((quote) => quoteTemplate(quote)).toList(),
       ),
     );
   }
