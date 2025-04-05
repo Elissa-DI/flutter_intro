@@ -4,8 +4,15 @@ void main() {
   runApp(MaterialApp(home: NinjaCard()));
 }
 
-class NinjaCard extends StatelessWidget {
+class NinjaCard extends StatefulWidget {
   const NinjaCard({super.key});
+
+  @override
+  State<NinjaCard> createState() => _NinjaCardState();
+}
+
+class _NinjaCardState extends State<NinjaCard> {
+  int ninjaLevel = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +29,30 @@ class NinjaCard extends StatelessWidget {
         backgroundColor: Colors.grey[850],
         elevation: 0.0,
       ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          FloatingActionButton(
+            onPressed: () {
+              setState(() {
+                ninjaLevel -= 1;
+              });
+            },
+            backgroundColor: Colors.grey[800],
+            child: Icon(Icons.remove, color: Colors.white),
+          ),
+          SizedBox(width: 10.0),
+          FloatingActionButton(
+            onPressed: () {
+              setState(() {
+                ninjaLevel += 1;
+              });
+            },
+            backgroundColor: Colors.grey[800],
+            child: Icon(Icons.add, color: Colors.white),
+          ),
+        ],
+      ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 0.0),
         child: Column(
@@ -37,7 +68,7 @@ class NinjaCard extends StatelessWidget {
             Text(
               'NAME',
               style: TextStyle(color: Colors.grey, letterSpacing: 2.0),
-            ), 
+            ),
             SizedBox(height: 10.0),
             Text(
               'Chun-Li',
@@ -55,7 +86,7 @@ class NinjaCard extends StatelessWidget {
             ),
             SizedBox(height: 10.0),
             Text(
-              '8',
+              '$ninjaLevel',
               style: TextStyle(
                 color: Colors.amberAccent[200],
                 letterSpacing: 2.0,
