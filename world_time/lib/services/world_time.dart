@@ -1,11 +1,13 @@
 import 'package:http/http.dart';
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 class WorldTime {
   late String location;
   late String time;
   late String flag;
   late String url;
+  late bool isDaytime;
 
   WorldTime({required this.location, required this.flag, required this.url});
 
@@ -18,7 +20,8 @@ class WorldTime {
       String datetime = data['dateTime'];
       DateTime now = DateTime.parse(datetime);
 
-      time = now.toString();
+      isDaytime = now.hour >= 6 && now.hour < 18;
+      time = DateFormat.jm().format(now);
     } catch (e) {
       print('Caught error: $e');
       time = 'Time can\'t be set';
