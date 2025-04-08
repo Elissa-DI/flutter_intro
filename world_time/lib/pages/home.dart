@@ -12,12 +12,15 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    data = ModalRoute.of(context)!.settings.arguments as Map;
-    print(data);
+    data =
+        data.isNotEmpty
+            ? data
+            : ModalRoute.of(context)!.settings.arguments as Map;
 
     //Set background image
     String bgImage = data['isDaytime'] ? 'daytime.jpg' : 'nighttime.jpg';
     Color? bgColor = data['isDaytime'] ? Colors.blue : Colors.indigo[700];
+    Color? textColor = data['isDaytime'] ? Colors.black : Colors.white;
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -34,14 +37,25 @@ class _HomeState extends State<Home> {
             child: Column(
               children: <Widget>[
                 TextButton.icon(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/location');
+                  onPressed: () async {
+                    dynamic result = await Navigator.pushNamed(
+                      context,
+                      '/location',
+                    );
+                    setState(() {
+                      data = {
+                        'time': result['time'],
+                        'location': result['location'],
+                        'isDaytime': result['isDaytime'],
+                        'flag': result['flag'],
+                      };
+                    });
                   },
                   label: Text(
                     'Edit Location',
-                    style: TextStyle(color: Colors.grey[300]),
+                    style: TextStyle(color: textColor),
                   ),
-                  icon: Icon(Icons.edit_location, color: Colors.grey[300]),
+                  icon: Icon(Icons.edit_location, color: textColor),
                 ),
                 SizedBox(height: 20.0),
                 Row(
@@ -52,7 +66,7 @@ class _HomeState extends State<Home> {
                       style: TextStyle(
                         fontSize: 28.0,
                         letterSpacing: 2.0,
-                        color: Colors.grey[300],
+                        color: textColor,
                       ),
                     ),
                   ],
@@ -60,7 +74,7 @@ class _HomeState extends State<Home> {
                 SizedBox(height: 20.0),
                 Text(
                   data['time'],
-                  style: TextStyle(fontSize: 66.0, color: Colors.grey[300]),
+                  style: TextStyle(fontSize: 66.0, color: textColor),
                 ),
               ],
             ),
